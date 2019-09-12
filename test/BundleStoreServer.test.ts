@@ -499,6 +499,29 @@ describe("server", () => {
             done();
           });
       });
+
+      it("should set Content-Type header to application/javascript in response", (done) => {
+        const sut = createServer({ rootPath: storeFixturePath });
+        const expectedBundle = fs.readFileSync(
+          path.join(
+            storeFixturePath,
+            "bundles",
+            "9e122bee-9a90-4158-9205-6759751d80dd",
+          ),
+        );
+        chai
+          .request(sut.app)
+          .get("/bundles/dummy/android/latest/index.bundle")
+          .buffer(true)
+          .parse(binaryParser)
+          .end((err, res) => {
+            if (err) {
+              return done(err);
+            }
+            expect(res.header["content-type"]).equal("application/javascript");
+            done();
+          });
+      });
     });
 
     describe("GET /bundles/:storeId/:platform/:bundleId/index.map", () => {

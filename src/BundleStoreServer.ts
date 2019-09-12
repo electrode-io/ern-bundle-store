@@ -362,7 +362,11 @@ export class BundleStoreServer {
       this.addBundleToReq.bind(this),
       (req, res) => {
         const bundle = req.bundle;
-        res.sendFile(this.getPathToBundle(bundle.id));
+        res.sendFile(this.getPathToBundle(bundle.id), {
+          headers: {
+            "Content-Type": "application/javascript",
+          },
+        });
       },
     );
 
