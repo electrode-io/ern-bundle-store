@@ -1,6 +1,5 @@
 /// <reference types="../types/index" />
 
-import program from "commander";
 import debug from "debug";
 import express from "express";
 import expressWs from "express-ws";
