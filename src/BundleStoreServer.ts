@@ -133,8 +133,13 @@ export class BundleStoreServer {
       this.config.maxBundles !== -1 &&
       store.bundles.length >= this.config.maxBundles
     ) {
+      const oldestBundle = store.bundles[0];
+      shell.rm(
+        this.getPathToBundle(oldestBundle.id),
+        this.getPathToSourceMap(oldestBundle.sourceMap),
+      );
       this.db.delBundle({
-        bundleId: store.bundles[0].id,
+        bundleId: oldestBundle.id,
         storeId: store.id,
       });
     }

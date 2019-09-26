@@ -223,6 +223,48 @@ describe("server", () => {
       ).true;
     });
 
+    it("should delete oldest bundle and source map file if needed", () => {
+      const tmpDir = createTmpDir();
+      shell.cp("-rf", path.join(storeFixturePath, "*"), tmpDir);
+      const store: Store = {
+        accessKey: "11122bee-9a90-4158-9205-6759751d80dd",
+        bundles: [
+          {
+            id: "9e122bee-9a90-4158-9205-6759751d80dd",
+            platform: "android",
+            sourceMap: "4a1aaa5b-89ae-477f-b6d7-9747131750d7",
+            timestamp: 1565981244558,
+          },
+        ],
+        id: "dummy",
+      };
+      const bundle: Bundle = {
+        id: "de0f2684-b070-4560-a01b-1a3fbc33d735",
+        platform: "android",
+        sourceMap: "24f0e611-5af7-49d9-bb11-5fa055c3c460",
+        timestamp: 1565981271727,
+      };
+      const sut = createServer({
+        dbSeed: {
+          assets: {},
+          stores: {
+            dummy: store,
+          },
+        },
+        maxBundles: 1,
+        rootPath: tmpDir,
+      });
+      sut.addBundleToStore(store, bundle);
+      const oldBundlePath = sut.getPathToBundle(
+        "9e122bee-9a90-4158-9205-6759751d80dd",
+      );
+      const oldSourceMapPath = sut.getPathToSourceMap(
+        "4a1aaa5b-89ae-477f-b6d7-9747131750d7",
+      );
+      expect(fs.existsSync(oldBundlePath)).false;
+      expect(fs.existsSync(oldSourceMapPath)).false;
+    });
+
     it("should remove oldest bundle from the store if needed", () => {
       const tmpDir = createTmpDir();
       const store: Store = {
