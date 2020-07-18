@@ -18,7 +18,7 @@
     "decompress-zip": "^0.2.2",
     "express": "^4.17.1",
     "express-ws": "^4.0.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "multer": "^1.4.2",
     "shelljs": "^0.8.3",
     "source-map": "^0.7.3",
